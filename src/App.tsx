@@ -15,6 +15,8 @@ import "katex/dist/katex.min.css";
  */
 type Mode = "aa" | "ab";
 
+const {raw} = String;
+
 /** Which ring we're calculating for */
 export interface Ring {
   p: number;
@@ -36,13 +38,19 @@ const initialState: Ring = {
 const primes = [2, 3, 5];
 
 const TABS = ["fp-single", "fp-table"] as const;
+const tabTitles = {
+  "fp-single": (
+    <>
+      <$>{raw`\K_*(R;F_p)`}</$> (individual)
+    </>
+  ),
+  "fp-table": "$K_*(R;F_p)$ (table)",
+};
 type Tab = (typeof TABS)[number];
 
 export default function App() {
   const [tab, setTab] = useState<Tab>("fp-table");
   const [ring, dispatch] = useReducer(reducer, initialState);
-
-  const {e, p} = ring;
 
   return (
     <div className="App">
@@ -53,7 +61,7 @@ export default function App() {
             Floor, ceiling, slopes, and <$>K</$>-theory
           </a>
         </cite>
-        . The source code is available at{" "}
+        . The source code is available{" "}
         <a href="https://github.com/ysulyma/math-fcsk" target="_blank">
           on GitHub
         </a>
@@ -66,7 +74,7 @@ export default function App() {
       <ul>
         {TABS.map((t) => (
           <li key={t}>
-            <button onClick={() => setTab(t)}>{t}</button>
+            <button onClick={() => setTab(t)}>{tabTitles[t]}</button>
           </li>
         ))}
       </ul>
@@ -79,7 +87,6 @@ export default function App() {
 function VarsTable({
   e,
   p,
-  mode,
   dispatch,
 }: Ring & {
   dispatch: React.Dispatch<Action>;
@@ -92,9 +99,9 @@ function VarsTable({
     dispatch({e: parseInt(evt.currentTarget.value)});
   };
 
-  const setRadio = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({mode: evt.currentTarget.value as Mode});
-  };
+  // const setRadio = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  //   dispatch({mode: evt.currentTarget.value as Mode});
+  // };
 
   return (
     <table>
@@ -128,7 +135,7 @@ function VarsTable({
             />
           </td>
         </tr>
-        <tr>
+        {/* <tr>
           <td>Mode</td>
           <td>
             <ul className="mode-list">
@@ -158,7 +165,7 @@ function VarsTable({
               </li>
             </ul>
           </td>
-        </tr>
+        </tr> */}
       </tbody>
     </table>
   );

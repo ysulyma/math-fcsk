@@ -35,7 +35,15 @@ p {
 /* github links */
 :link[href^="https://github.com"]::before
 {
-  content: url("/github-icon.svg");
+  content: "";
+  background-image: url("/github-icon.svg");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  display: inline-block;
+  height: 1em;
+  margin-right: 0.25em;
+  width: 1em;
+  vertical-align: middle;
 }
 
 /* ui */
