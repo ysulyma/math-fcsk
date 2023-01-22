@@ -9,7 +9,7 @@
 }
 
 body {
-  font-size: 2.4rem;
+  font-size: 1.8rem;
 }
 
 .App {
@@ -47,6 +47,10 @@ p {
 }
 
 /* ui */
+.tabs {
+  background-color: #eee;
+}
+
 fieldset table {
   margin: 0 auto 0.5em;
 }
@@ -85,7 +89,8 @@ input[type="number"] {
 /* products table */
 .products {
   border-collapse: collapse;
-  margin: 1em auto;
+  font-size: 0.8em;
+  margin: 1em 0;
 }
 
 .products th {
@@ -103,13 +108,21 @@ input[type="number"] {
 .products th,
 .products td {
   border: 1px solid #333;
-  padding: 0.5em;
+  padding: 0.2em 0.3em;
 }
-
+/* 
 .products th[rowspan] ~ td:nth-child(odd),
 .products th:not([rowspan]):first-child ~ td:nth-child(even) {
-  background-color: #eee;
+  background-color: #0011;
 }
+
+.products > tbody > tr:nth-child(odd) {
+  background-color: #0011;
+}
+
+.products > tbody > tr > th[rowspan] {
+  background-color: #fff;
+} */
 
 /* source */
 .tex-source {
@@ -126,4 +139,59 @@ pre > code {
   max-height: 400px;
   overflow: auto;
   padding: 0.5em;
+}
+
+.TabsRoot {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.TabsList {
+  flex-shrink: 0;
+  display: flex;
+  border-bottom: 1px solid purple;
+  margin: 1em 0;
+}
+
+.TabsTrigger {
+  all: unset;
+  font-family: inherit;
+  background-color: white;
+  border: 1px solid #aaa;
+  padding: 0 20px;
+  height: 45px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  line-height: 1;
+  color: #aaa;
+  user-select: none;
+}
+.TabsTrigger:first-child {
+  border-top-left-radius: 6px;
+}
+.TabsTrigger:last-child {
+  border-top-right-radius: 6px;
+}
+.TabsTrigger:hover {
+  color: #000;
+}
+.TabsTrigger[data-state="active"] {
+  background-color: purple;
+  color: #fff;
+  box-shadow: inset 0 -1px 0 0 currentColor, 0 1px 0 0 currentColor;
+}
+.TabsTrigger:focus {
+  position: relative;
+  box-shadow: 0 0 0 2px black;
+}
+
+.TabsContent {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: white;
+  outline: none;
 }

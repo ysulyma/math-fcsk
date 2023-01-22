@@ -1,6 +1,7 @@
 import {combineRefs} from "@liqvid/utils/react";
 import {usePlayer} from "liqvid";
 import {forwardRef, useEffect, useRef} from "react";
+
 import {Handle, MJX as MJXPlain, MJXText as MJXTextPlain} from "./plain";
 
 interface Props extends React.ComponentProps<typeof MJXPlain> {

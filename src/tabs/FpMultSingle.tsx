@@ -1,4 +1,4 @@
-import {MJX} from "@liqvid/mathjax/plain";
+import {KTX as $} from "@liqvid/katex/plain";
 import {range} from "@liqvid/utils/misc";
 import {useReducer} from "react";
 
@@ -14,7 +14,6 @@ import {
   valTerm,
 } from "../generators";
 import {formatSum} from "../latex";
-import {macros} from "../macros";
 
 const {raw} = String;
 
@@ -53,26 +52,31 @@ export function FpMultSingle({e, p}: Ring) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <div className="App">
-      <MJX>{macros}</MJX>
+    <>
+      {/* <h2>
+        Mod-<$>p</$> ring structure (single)
+      </h2> */}
       <p>
-        Note that <MJX>{raw`n? \mathrel{\ :=\ } (n-1)!`}</MJX> denotes the Gamma
-        function. Faded terms vanish in{" "}
-        <MJX>{raw`H^*(\Nyg^{\ge i}\prism_R/p)`}</MJX>
+        §5.3 of the paper. We write <$>{raw`n? \mathrel{\ :=\ } (n-1)!`}</$> for
+        the Gamma function. We fade terms which vanish in{" "}
+        <$>{raw`H^*(\Nyg^{\ge i}\prism_R/p)`}</$> without forming an element of{" "}
+        <$>{raw`H^*\F_p(i)`}</$>.
       </p>
       <fieldset>
         <VarsTable {...state} {...{e, p, dispatch}} />
         <TermsTable {...state} {...{e, p, dispatch}} />
       </fieldset>
       <Equations {...state} {...{e, p}} />
-    </div>
+    </>
   );
 }
 
+/** Configure aa vs ab products. */
 function VarsTable({
   mode,
   dispatch,
-}: State & {
+}: {
+  mode: Mode;
   dispatch: React.Dispatch<Action>;
 }) {
   const setRadio = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,41 +84,35 @@ function VarsTable({
   };
 
   return (
-    <table>
-      <tbody>
-        <tr>
-          <td>Mode</td>
-          <td>
-            <ul className="mode-list">
-              <li>
-                <label>
-                  <input
-                    checked={mode === "aa"}
-                    onChange={setRadio}
-                    name="mode"
-                    type="radio"
-                    value="aa"
-                  />{" "}
-                  <MJX>{`aa`}</MJX>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input
-                    checked={mode === "ab"}
-                    onChange={setRadio}
-                    name="mode"
-                    type="radio"
-                    value="ab"
-                  />{" "}
-                  <MJX>{`ab`}</MJX>
-                </label>
-              </li>
-            </ul>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <fieldset>
+      Mode
+      <ul className="mode-list">
+        <li>
+          <label>
+            <input
+              checked={mode === "aa"}
+              onChange={setRadio}
+              name="mode"
+              type="radio"
+              value="aa"
+            />{" "}
+            <$>aa</$>
+          </label>
+        </li>
+        <li>
+          <label>
+            <input
+              checked={mode === "ab"}
+              onChange={setRadio}
+              name="mode"
+              type="radio"
+              value="ab"
+            />{" "}
+            <$>bb</$>
+          </label>
+        </li>
+      </ul>
+    </fieldset>
   );
 }
 
@@ -152,7 +150,7 @@ function TermsTable({
       <tbody>
         <tr>
           <td>
-            <MJX>i_1</MJX>
+            <$>i_1</$>
           </td>
           <td>
             <input
@@ -165,7 +163,7 @@ function TermsTable({
             />
           </td>
           <td>
-            <MJX>i_2</MJX>
+            <$>i_2</$>
           </td>
           <td>
             <input
@@ -180,7 +178,7 @@ function TermsTable({
         </tr>
         <tr>
           <td>
-            <MJX>j_1</MJX>
+            <$>j_1</$>
           </td>
           <td>
             <select value={j1} onChange={setJ1}>
@@ -192,7 +190,7 @@ function TermsTable({
             </select>
           </td>
           <td>
-            <MJX>j_2</MJX>
+            <$>j_2</$>
           </td>
           <td>
             <select value={j2} onChange={setJ2}>
@@ -298,11 +296,9 @@ function Equations({mode, i1, j1, i2, j2, e, p}: Ring & State) {
   // won't work without span
   return (
     <>
-      <MJX display span>
-        {tex}
-      </MJX>
+      <$ display>{tex}</$>
       <div className="tex-source">
-        <MJX>\TeX</MJX> code:
+        <$>\TeX</$> code:
         <pre>
           <code>{tex}</code>
         </pre>

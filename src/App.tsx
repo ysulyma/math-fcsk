@@ -1,21 +1,48 @@
+import {KTX as $} from "@liqvid/katex/plain";
 import {MJX} from "@liqvid/mathjax/plain";
-import {useReducer, useState} from "react";
+import * as Tabs from "@radix-ui/react-tabs";
+import {useReducer} from "react";
 
 import {macros} from "./macros";
-
-import "./styles.css";
 import {FpMultSingle} from "./tabs/FpMultSingle";
-import {FpMultTable, ProductsTable} from "./tabs/FpMultTable";
+import {FpMultTable} from "./tabs/FpMultTable";
+import {Interlocking} from "./tabs/Interlocking";
+import "./styles.css";
 
-import {InlineMath as $} from "react-katex";
-import "katex/dist/katex.min.css";
-
-/**
- * What type of product to show.
- */
-type Mode = "aa" | "ab";
-
+// for LaTeX
 const {raw} = String;
+
+// tabs
+interface TabData {
+  key: string;
+  title: React.ReactNode;
+  component: (props: Ring) => JSX.Element;
+}
+const tabs: TabData[] = [
+  // {
+  //   key: "interlocking",
+  //   title: "Interlocking slopes",
+  //   component: Interlocking,
+  // },
+  {
+    key: "fp-single",
+    title: (
+      <>
+        Mod-<$>{raw`p\ `}</$> ring structure (individual)
+      </>
+    ),
+    component: FpMultSingle,
+  },
+  {
+    key: "fp-table",
+    title: (
+      <>
+        Mod-<$>{raw`p\ `}</$> ring structure (table)
+      </>
+    ),
+    component: FpMultTable,
+  },
+];
 
 /** Which ring we're calculating for */
 export interface Ring {
@@ -37,19 +64,7 @@ const initialState: Ring = {
 // pretty sure this is all of them
 const primes = [2, 3, 5];
 
-const TABS = ["fp-single", "fp-table"] as const;
-const tabTitles = {
-  "fp-single": (
-    <>
-      <$>{raw`\K_*(R;F_p)`}</$> (individual)
-    </>
-  ),
-  "fp-table": "$K_*(R;F_p)$ (table)",
-};
-type Tab = (typeof TABS)[number];
-
 export default function App() {
-  const [tab, setTab] = useState<Tab>("fp-table");
   const [ring, dispatch] = useReducer(reducer, initialState);
 
   return (
@@ -71,15 +86,26 @@ export default function App() {
       <fieldset>
         <VarsTable {...ring} dispatch={dispatch} />
       </fieldset>
-      <ul>
-        {TABS.map((t) => (
-          <li key={t}>
-            <button onClick={() => setTab(t)}>{tabTitles[t]}</button>
-          </li>
-        ))}
-      </ul>
-      {tab === "fp-single" && <FpMultSingle {...ring} />}
-      {tab === "fp-table" && <FpMultTable {...ring} />}
+      {/* see https://www.radix-ui.com/docs/primitives/components/tabs */}
+      <Tabs.Root className="TabsRoot" defaultValue="fp-table">
+        <Tabs.List className="TabsList">
+          {tabs.map((t) => (
+            <Tabs.Trigger className="TabsTrigger" key={t.key} value={t.key}>
+              {t.title}
+            </Tabs.Trigger>
+          ))}
+        </Tabs.List>
+        {tabs.map((t) => {
+          // components need to have a capital variable name
+          const Component = t.component;
+
+          return (
+            <Tabs.Content className="TabsContent" key={t.key} value={t.key}>
+              <Component {...ring} />
+            </Tabs.Content>
+          );
+        })}
+      </Tabs.Root>
     </div>
   );
 }

@@ -10,14 +10,17 @@
   ],
   "main": "src/index.tsx",
   "dependencies": {
+    "@liqvid/katex": "^0.1.0",
     "@liqvid/mathjax": "0.1.2",
     "@liqvid/utils": "^1.8.0",
+    "@radix-ui/react-tabs": "^1.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-katex": "^3.0.1",
     "react-scripts": "5.0.1"
   },
   "devDependencies": {
+    "@types/katex": "^0.16.0",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",
     "@types/react-katex": "^3.0.0",

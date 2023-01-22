@@ -1,19 +1,82 @@
-import {MJX} from "@liqvid/mathjax/plain";
+import {KTX as $} from "@liqvid/katex/plain";
 import {range} from "@liqvid/utils/misc";
-import {Fragment} from "react";
+import React, {useState, Fragment} from "react";
 
 import {Ring} from "../App";
 import {formatGen, GeneratorName, syntomicProduct} from "../generators";
 import {formatSum} from "../latex";
+import {Vars} from "../Vars";
 
 const {raw} = String;
 
+/**
+ * What type of product to show.
+ */
+type Mode = "aa" | "ab";
+
 export function FpMultTable({e, p}: Ring) {
-  return <LatexTable {...{e, p}} />;
+  const [mode, setMode] = useState<Mode>("aa");
+
+  return (
+    <>
+      <h2></h2>
+      <p>§5.3 of the paper.</p>
+      <ModeConfig {...{mode, setMode}} />
+      <TimesTable {...{e, p, mode}} />
+      <LatexTable {...{e, p, mode}} />
+    </>
+  );
 }
 
-export function ProductsTable({e, p}: Ring) {
-  const mode = "aa";
+/** Configure aa vs ab products. */
+function ModeConfig({
+  mode,
+  setMode,
+}: {
+  mode: Mode;
+  setMode: React.Dispatch<React.SetStateAction<Mode>>;
+}) {
+  const setRadio = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setMode(evt.currentTarget.value as Mode);
+  };
+
+  return (
+    <fieldset>
+      Mode
+      <ul className="mode-list">
+        <li>
+          <label>
+            <input
+              checked={mode === "aa"}
+              onChange={setRadio}
+              name="mode"
+              type="radio"
+              value="aa"
+            />{" "}
+            <$>aa</$>
+          </label>
+        </li>
+        <li>
+          <label>
+            <input
+              checked={mode === "ab"}
+              onChange={setRadio}
+              name="mode"
+              type="radio"
+              value="ab"
+            />{" "}
+            <$>bb</$>
+          </label>
+        </li>
+      </ul>
+    </fieldset>
+  );
+}
+
+/**
+ * Display the products in a table.
+ */
+function TimesTable({e, p, mode}: Ring & {mode: Mode}) {
   const k = mode === "aa" ? 0 : 1;
   const minI = 1;
   const maxI = 5;
@@ -23,11 +86,11 @@ export function ProductsTable({e, p}: Ring) {
       <thead>
         <tr>
           <th colSpan={2} rowSpan={2}>
-            <MJX span>{raw`\K_*(k[x]/x^{${e}};\F_{${p}})`}</MJX>
+            <$>{raw`\K_*(k[x]/x^{${e}};\F_{${p}})`}</$>
           </th>
           {range(minI, maxI).map((i) => (
             <th colSpan={validJs({e, i, p}).length} key={i}>
-              <MJX span>{raw`\K_{${2 * i - k}}`}</MJX>
+              <$>{raw`\K_{${2 * i - k}}`}</$>
             </th>
           ))}
         </tr>
@@ -36,7 +99,7 @@ export function ProductsTable({e, p}: Ring) {
             <Fragment key={i}>
               {validJs({e, i, p}).map((j) => (
                 <th key={j}>
-                  <MJX span>{formatGen({i, j, k})}</MJX>
+                  <$>{formatGen({i, j, k})}</$>
                 </th>
               ))}
             </Fragment>
@@ -50,11 +113,11 @@ export function ProductsTable({e, p}: Ring) {
               <tr key={j1}>
                 {j1 === 1 && (
                   <th rowSpan={validJs({e, i: i1, p}).length}>
-                    <MJX span>{raw`\K_{${2 * i1}}`}</MJX>
+                    <$>{raw`\K_{${2 * i1}}`}</$>
                   </th>
                 )}
                 <th>
-                  <MJX span>{formatGen({i: i1, j: j1, k: 0})}</MJX>
+                  <$>{formatGen({i: i1, j: j1, k: 0})}</$>
                 </th>
                 {range(minI, maxI).map((i2) => (
                   <Fragment key={i2}>
@@ -78,7 +141,7 @@ export function ProductsTable({e, p}: Ring) {
                       const tex = formatSum(product.map(formatGen));
                       return (
                         <td key={j2}>
-                          {product.length > 0 && <MJX span>{tex}</MJX>}
+                          {product.length > 0 && <$ display>{tex}</$>}
                         </td>
                       );
                     })}
@@ -93,8 +156,7 @@ export function ProductsTable({e, p}: Ring) {
   );
 }
 
-function LatexTable({e, p}: Ring) {
-  const mode = "ab";
+function LatexTable({e, p, mode}: Ring & {mode: Mode}) {
   const k = mode === "aa" ? 0 : 1;
   const minI = 1;
   const maxI = 4;
@@ -227,11 +289,10 @@ function LatexTable({e, p}: Ring) {
   // render
   return (
     <div className="tex-source">
-      <textarea value={tex} />
-      {/* <MJX span>\TeX</MJX> code:
+      <$>\TeX</$> code:
       <pre>
-        <code>{tex}</code>
-      </pre> */}
+        <code>{texHeader + tex + texFooter}</code>
+      </pre>
     </div>
   );
 }
@@ -243,3 +304,19 @@ function validJs({e, i, p}: {e: number; i: number; p: number}): number[] {
 function join(...args: string[]): string {
   return args.join("");
 }
+
+const texHeader = raw`\documentclass[border=0in]{standalone}
+${"\\"}usepackage{amsmath, amssymb, amsthm}
+${"\\"}usepackage{multirow}
+${"\\"}usepackage{makecell}
+
+\newcolumntype{?}{!{\vrule width 1pt}}
+\renewcommand{\arraystretch}{1.2}
+
+\newcommand{\F}{\mathbf F}
+\newcommand{\K}{\mathrm K}
+
+\begin{document}
+`;
+
+const texFooter = raw`${"\n"}\end{document}`;

@@ -8,6 +8,7 @@ import {
   useImperativeHandle,
   useRef,
 } from "react";
+
 import {MJX as MJXFancy} from "./fancy";
 import {Handle as MJXHandle, MJX as MJXPlain} from "./plain";
 

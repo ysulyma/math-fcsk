@@ -1,5 +1,6 @@
 import {MJX} from "@liqvid/mathjax/plain";
 import {between} from "@liqvid/utils/misc";
+
 import {brace, epsilon, fpow, logceil, logfloor} from "./utils";
 
 const {ceil, floor, max} = Math;

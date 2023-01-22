@@ -1,5 +1,6 @@
 import {MJX} from "@liqvid/mathjax/plain";
 import {useState} from "react";
+
 import {Bands} from "./Bands";
 import {macros} from "./macros";
 import "./styles.css";

@@ -6,6 +6,7 @@ import {
   useImperativeHandle,
   useRef,
 } from "react";
+
 import {MathJaxReady} from "./loading";
 
 /**
