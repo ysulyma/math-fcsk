@@ -12,7 +12,7 @@ npm install
 ```
 Once you have done this, run
 ```bash
-npm run dev
+vite
 ```
 and open your browser with the URL it gives you.
 
