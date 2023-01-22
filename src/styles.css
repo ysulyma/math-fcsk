@@ -1,0 +1,121 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 2.4rem;
+}
+
+.App {
+  font-family: sans-serif;
+  padding: 1em;
+}
+
+/* text styles */
+h1 {
+  text-align: center;
+}
+
+:link,
+:visited {
+  color: #2a7ae2;
+  text-decoration: none;
+}
+
+p {
+  margin: 1em 0;
+}
+
+/* github links */
+:link[href^="https://github.com"]::before
+{
+  content: url("/github-icon.svg");
+}
+
+/* ui */
+fieldset table {
+  margin: 0 auto 0.5em;
+}
+
+fieldset td {
+  padding: 0 0.5em;
+  text-align: right;
+  vertical-align: top;
+}
+
+.mode-list {
+  list-style: none;
+  list-style-position: outside;
+  text-align: left;
+}
+
+input[type="number"] {
+  width: 5em;
+}
+
+/* MathJax behaves badly for some reason */
+[size="s"] {
+  font-size: 0.8em;
+}
+
+/* \prism */
+.prism {
+  background-image: url("data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%2035.795%2044%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20style%3D%22color%3A%23000%3Bfill%3A%23000%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B-inkscape-stroke%3Anone%22%20d%3D%22M76.965%20122.135a1.05%201.05%200%200%200-.974.66l-14.717%2036.741a1.05%201.05%200%200%200%20.974%201.442l29.517.023a1.05%201.05%200%200%200%20.976-1.441L77.94%20122.794a1.05%201.05%200%200%200-.975-.659zm.005%203.87%202.544%206.32-10.65%2026.557-5.065-.004zm3.624%209.004%209.618%2023.89-19.194-.015z%22%20transform%3D%22translate(-59.11%20-119.568)%22%2F%3E%3C%2Fsvg%3E");
+  color: transparent;
+  height: 1em;
+  width: calc(1em * 35.795 / 44);
+  background-repeat: no-repeat;
+  vertical-align: text-bottom;
+}
+
+/* products table */
+.products {
+  border-collapse: collapse;
+  margin: 1em auto;
+}
+
+.products th {
+  text-align: center;
+}
+
+.products > thead > tr:nth-child(2) > th {
+  border-bottom-width: 2px;
+}
+
+.products > tbody > tr > th:not([rowspan]) {
+  border-right-width: 2px;
+}
+
+.products th,
+.products td {
+  border: 1px solid #333;
+  padding: 0.5em;
+}
+
+.products th[rowspan] ~ td:nth-child(odd),
+.products th:not([rowspan]):first-child ~ td:nth-child(even) {
+  background-color: #eee;
+}
+
+/* source */
+.tex-source {
+  text-align: left;
+}
+
+pre > code {
+  background-color: #645757;
+  border-radius: 3px;
+  box-shadow: 0 0 0.5em inset #0004;
+  color: #fff;
+  display: block;
+  margin: 1em auto;
+  max-height: 400px;
+  overflow: auto;
+  padding: 0.5em;
+}
