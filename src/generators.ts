@@ -1,5 +1,15 @@
 import {protect} from "./latex";
-import {logceil, logfloor, factorial, fpow, valp, reduceP} from "./utils";
+import {
+  brace,
+  logceil,
+  logfloor,
+  factorial,
+  fpow,
+  valp,
+  reduceP,
+  epsilon,
+  legendre,
+} from "./utils";
 
 const {ceil, floor, max} = Math;
 const {raw} = String;
@@ -14,7 +24,7 @@ export interface Term {
   dlog: boolean;
   pPower: number;
   degree: number;
-  denom: number;
+  denomValP: number;
   denomString: string;
 }
 
@@ -41,14 +51,23 @@ export function fpiGenerator({
   const terms: Term[] = [];
 
   for (let r = s; r <= t; ++r) {
-    terms.push(
-      nygGenerator({
-        d: p ** r * j,
-        e,
-        i,
-        k,
-      }),
-    );
+    const d = p ** r * j;
+
+    /** Image of the differential */
+    const nygDiff = epsilon({i, d, e, p}) * brace(d, e);
+
+    // only include cocyles
+    if (nygDiff % p === 0) {
+      terms.push(
+        nygGenerator({
+          d,
+          e,
+          i,
+          k,
+          p,
+        }),
+      );
+    }
   }
 
   return terms;
@@ -62,11 +81,13 @@ export function nygGenerator({
   e,
   i,
   k,
+  p,
 }: {
   d: number;
   e: number;
   i: number;
   k: number;
+  p: number;
 }): Term {
   /** Hodge degree */
   const hodge = k === 0 ? floor(d / e) : ceil(d / e);
@@ -74,7 +95,7 @@ export function nygGenerator({
   return {
     pPower: max(0, i - hodge),
     degree: d,
-    denom: factorial(hodge - k),
+    denomValP: legendre(hodge - k, p),
     denomString: hodge + "!?"[k],
     dlog: k === 1,
   };
@@ -83,22 +104,17 @@ export function nygGenerator({
 /**
  * Format a {@link Term term}.
  */
-export function formatTerm({
-  pPower,
-  degree,
-  denom,
-  denomString,
-  dlog,
-}: Term): string {
+export function formatTerm({pPower, degree, denomString, dlog}: Term): string {
   let str = "";
 
   str += fpow("p", pPower);
 
   const numerator = fpow("x", degree);
-  if (denom === 1) {
+  const simpleDenom = simplify(denomString);
+  if (simpleDenom === "") {
     str += numerator;
   } else {
-    str += raw`\dfrac{${numerator}}{${simplify(denomString)}}`;
+    str += raw`\dfrac{${numerator}}{${simpleDenom}}`;
   }
 
   if (dlog) {
@@ -115,7 +131,7 @@ export function multiplyTerms(a: Term, b: Term): Term {
   return {
     pPower: a.pPower + b.pPower,
     degree: a.degree + b.degree,
-    denom: a.denom * b.denom,
+    denomValP: a.denomValP + b.denomValP,
     denomString: `${a.denomString}${b.denomString}`,
     dlog: a.dlog || b.dlog,
   };
@@ -124,9 +140,8 @@ export function multiplyTerms(a: Term, b: Term): Term {
 /**
  * Get the p-adic valuation of the coefficient of a term.
  */
-export function valTerm(term: Term, p: number): number {
-  console.log(term.denom);
-  return term.pPower - valp(term.denom, p);
+export function valTerm(term: Term): number {
+  return term.pPower - term.denomValP;
 }
 
 /**
@@ -148,6 +163,10 @@ export function syntomicProduct({
   const sum1 = fpiGenerator({gen: gen1, e, p});
   const sum2 = fpiGenerator({gen: gen2, e, p});
 
+  if (sum1.length === 0 || sum2.length === 0) {
+    return [];
+  }
+
   // only need to go across first row/column
   const products: Term[] = [];
   for (let index = 0; index < sum1.length; ++index) {
@@ -165,9 +184,10 @@ export function syntomicProduct({
       e,
       i: gen1.i + gen2.i,
       k: product.dlog ? 1 : 0,
+      p,
     });
 
-    if (valTerm(product, p) === valTerm(nyg, p)) {
+    if (valTerm(product) === valTerm(nyg)) {
       generators.push({
         k: gen1.k + gen2.k,
         i: gen1.i + gen2.i,

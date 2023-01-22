@@ -12,6 +12,7 @@ export const macros = raw`
 \newcommand{\rc}{\right\rceil}
 \newcommand{\dlog}{\,\operatorname{dlog}\,}
 
+\newcommand{\can}{\mathrm{can}}
 \newcommand{\Nyg}{\mathcal N}
 \newcommand{\prism}{
   {\class{prism}{\Delta}}

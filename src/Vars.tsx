@@ -28,7 +28,7 @@ export function Vars({
   setK: React.Dispatch<React.SetStateAction<0 | 1>>;
   setP: React.Dispatch<React.SetStateAction<number>>;
 }) {
-  const jOptions = range(1, 25).filter((j) => j % p !== 0);
+  const jOptions = range(1, 51).filter((j) => j % p !== 0);
 
   return (
     <fieldset>

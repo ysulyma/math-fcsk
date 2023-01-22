@@ -59,8 +59,7 @@ export function FpMultSingle({e, p}: Ring) {
       <p>
         §5.3 of the paper. We write <$>{raw`n? \mathrel{\ :=\ } (n-1)!`}</$> for
         the Gamma function. We fade terms which vanish in{" "}
-        <$>{raw`H^*(\Nyg^{\ge i}\prism_R/p)`}</$> without forming an element of{" "}
-        <$>{raw`H^*\F_p(i)`}</$>.
+        <$>{raw`H^*(\Nyg^{\ge i}\prism_R/p)`}</$>.
       </p>
       <fieldset>
         <VarsTable {...state} {...{e, p, dispatch}} />
@@ -108,7 +107,7 @@ function VarsTable({
               type="radio"
               value="ab"
             />{" "}
-            <$>bb</$>
+            <$>ab</$>
           </label>
         </li>
       </ul>
@@ -127,7 +126,7 @@ function TermsTable({
   State & {
     dispatch: React.Dispatch<Action>;
   }) {
-  const jOptions = range(1, 25).filter((j) => j % p !== 0);
+  const jOptions = range(1, 51).filter((j) => j % p !== 0);
 
   const setI1 = (evt: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({i1: parseInt(evt.currentTarget.value)});
@@ -260,10 +259,11 @@ function Equations({mode, i1, j1, i2, j2, e, p}: Ring & State) {
               e,
               i: i1 + i2,
               k: product.dlog ? 1 : 0,
+              p,
             });
 
             let str = "";
-            if (valTerm(product, p) > valTerm(nyg, p)) {
+            if (valTerm(product) > valTerm(nyg)) {
               str += raw`\color{gray} `;
             }
             str += formatTerm(product);

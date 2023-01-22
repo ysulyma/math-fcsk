@@ -1,10 +1,29 @@
 import {MJX} from "@liqvid/mathjax/plain";
 import {between} from "@liqvid/utils/misc";
+import {useState} from "react";
 
-import {brace, epsilon, fpow, logceil, logfloor} from "./utils";
+import {macros} from "../macros";
+import {brace, epsilon, fpow, logceil, logfloor} from "../utils";
+import {Vars} from "../Vars";
 
 const {ceil, floor, max} = Math;
 const {raw} = String;
+
+export function Tower() {
+  const [e, setE] = useState(4);
+  const [i, setI] = useState(4);
+  const [j, setJ] = useState(3);
+  const [k, setK] = useState<0 | 1>(0);
+  const [p, setP] = useState(2);
+  return (
+    <>
+      <p>Figure 1 of the paper, also relevant in §5.3.</p>
+      <Vars {...{e, i, j, k, p, setE, setI, setJ, setK, setP}} />
+      <MJX>{macros}</MJX>
+      <Bands es={[e]} {...{i, j, k, p}} />
+    </>
+  );
+}
 
 /** Display the p^* j sequence. */
 export function Bands({
@@ -73,7 +92,7 @@ export function Bands({
       let Nyg, normal;
 
       /** Image of the differential */
-      const nygDiff = epsilon(i, d, e, p) * brace(d, e);
+      const nygDiff = epsilon({i, d, e, p}) * brace(d, e);
 
       // Nygaard
       Nyg = "";

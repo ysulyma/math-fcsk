@@ -1,11 +1,15 @@
 import {KTX as $} from "@liqvid/katex/plain";
 import {range} from "@liqvid/utils/misc";
-import React, {useState, Fragment} from "react";
+import {Fragment, useState} from "react";
 
 import {Ring} from "../App";
-import {formatGen, GeneratorName, syntomicProduct} from "../generators";
+import {
+  formatGen,
+  fpiGenerator,
+  GeneratorName,
+  syntomicProduct,
+} from "../generators";
 import {formatSum} from "../latex";
-import {Vars} from "../Vars";
 
 const {raw} = String;
 
@@ -13,6 +17,9 @@ const {raw} = String;
  * What type of product to show.
  */
 type Mode = "aa" | "ab";
+
+const minI = 1;
+const maxI = 4;
 
 export function FpMultTable({e, p}: Ring) {
   const [mode, setMode] = useState<Mode>("aa");
@@ -65,7 +72,7 @@ function ModeConfig({
               type="radio"
               value="ab"
             />{" "}
-            <$>bb</$>
+            <$>ab</$>
           </label>
         </li>
       </ul>
@@ -78,8 +85,6 @@ function ModeConfig({
  */
 function TimesTable({e, p, mode}: Ring & {mode: Mode}) {
   const k = mode === "aa" ? 0 : 1;
-  const minI = 1;
-  const maxI = 5;
 
   return (
     <table className="products">
@@ -88,16 +93,16 @@ function TimesTable({e, p, mode}: Ring & {mode: Mode}) {
           <th colSpan={2} rowSpan={2}>
             <$>{raw`\K_*(k[x]/x^{${e}};\F_{${p}})`}</$>
           </th>
-          {range(minI, maxI).map((i) => (
-            <th colSpan={validJs({e, i, p}).length} key={i}>
+          {range(minI, maxI + 1).map((i) => (
+            <th colSpan={validJs({e, i, k, p}).length} key={i}>
               <$>{raw`\K_{${2 * i - k}}`}</$>
             </th>
           ))}
         </tr>
         <tr>
-          {range(minI, maxI).map((i) => (
+          {range(minI, maxI + 1).map((i) => (
             <Fragment key={i}>
-              {validJs({e, i, p}).map((j) => (
+              {validJs({e, i, k, p}).map((j) => (
                 <th key={j}>
                   <$>{formatGen({i, j, k})}</$>
                 </th>
@@ -107,21 +112,21 @@ function TimesTable({e, p, mode}: Ring & {mode: Mode}) {
         </tr>
       </thead>
       <tbody>
-        {range(minI, maxI).map((i1) => (
+        {range(minI, maxI + 1).map((i1) => (
           <Fragment key={i1}>
-            {validJs({e, i: i1, p}).map((j1) => (
+            {validJs({e, i: i1, k: 0, p}).map((j1, index) => (
               <tr key={j1}>
-                {j1 === 1 && (
-                  <th rowSpan={validJs({e, i: i1, p}).length}>
+                {index === 0 && (
+                  <th rowSpan={validJs({e, i: i1, k: 0, p}).length}>
                     <$>{raw`\K_{${2 * i1}}`}</$>
                   </th>
                 )}
                 <th>
                   <$>{formatGen({i: i1, j: j1, k: 0})}</$>
                 </th>
-                {range(minI, maxI).map((i2) => (
+                {range(minI, maxI + 1).map((i2) => (
                   <Fragment key={i2}>
-                    {validJs({e, i: i2, p}).map((j2) => {
+                    {validJs({e, i: i2, k, p}).map((j2) => {
                       const gen1: GeneratorName = {
                         i: i1,
                         j: j1,
@@ -158,8 +163,6 @@ function TimesTable({e, p, mode}: Ring & {mode: Mode}) {
 
 function LatexTable({e, p, mode}: Ring & {mode: Mode}) {
   const k = mode === "aa" ? 0 : 1;
-  const minI = 1;
-  const maxI = 4;
 
   const indent = " ".repeat(2);
   const newline = "\n";
@@ -170,7 +173,7 @@ function LatexTable({e, p, mode}: Ring & {mode: Mode}) {
 
   // begin
   const colCount =
-    2 + is.map((i) => validJs({e, i, p}).length).reduce((a, b) => a + b, 0);
+    2 + is.map((i) => validJs({e, i, k, p}).length).reduce((a, b) => a + b, 0);
   tex += raw`\begin{tabular}{|cc?*{${colCount - 2}}{c|}}${newline}`;
   tex += join(indent, raw`\hline`, newline);
 
@@ -182,7 +185,7 @@ function LatexTable({e, p, mode}: Ring & {mode: Mode}) {
 
   // K column headers
   for (let i = minI; i <= maxI; i++) {
-    const js = validJs({e, i, p});
+    const js = validJs({e, i, k, p});
     tex += join(
       newline,
       indent.repeat(2),
@@ -196,7 +199,8 @@ function LatexTable({e, p, mode}: Ring & {mode: Mode}) {
   tex += indent.repeat(2);
   tex += is
     .map((i) => {
-      const js = validJs({e, i, p});
+      const js = validJs({e, i, k, p});
+
       const str = raw`\cline{${col}-${col + js.length - 1}}`;
       col += js.length;
       return str;
@@ -210,7 +214,7 @@ function LatexTable({e, p, mode}: Ring & {mode: Mode}) {
     "&& ",
     is
       .map((i) =>
-        validJs({e, i, p})
+        validJs({e, i, k, p})
           .map((j) => `$${formatGen({i, j, k})}$`)
           .join(" & "),
       )
@@ -221,7 +225,7 @@ function LatexTable({e, p, mode}: Ring & {mode: Mode}) {
 
   // table body
   for (const i1 of is) {
-    const js = validJs({e, i: i1, p});
+    const js = validJs({e, i: i1, k: 0, p});
 
     for (const j1 of js) {
       const cols = [];
@@ -243,7 +247,7 @@ function LatexTable({e, p, mode}: Ring & {mode: Mode}) {
 
       // products
       for (const i2 of is) {
-        const js = validJs({e, i: i2, p});
+        const js = validJs({e, i: i2, k, p});
 
         for (const j2 of js) {
           const gen1: GeneratorName = {
@@ -297,8 +301,27 @@ function LatexTable({e, p, mode}: Ring & {mode: Mode}) {
   );
 }
 
-function validJs({e, i, p}: {e: number; i: number; p: number}): number[] {
-  return range(1, e * i + 1).filter((j) => j % p !== 0);
+function validJs({
+  e,
+  i,
+  k,
+  p,
+}: {
+  e: number;
+  i: number;
+  k: number;
+  p: number;
+}): number[] {
+  return range(1, e * i + 1).filter((j) => {
+    if (j % p === 0) {
+      return false;
+    }
+    const gen = fpiGenerator({gen: {i, j, k}, e, p});
+    if (gen.length === 0) {
+      return false;
+    }
+    return true;
+  });
 }
 
 function join(...args: string[]): string {

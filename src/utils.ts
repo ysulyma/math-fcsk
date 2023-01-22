@@ -81,7 +81,17 @@ export function fpow(name: number | string, r: number, zero = "") {
   return name + (r === 1 ? "" : "^{" + r + "}");
 }
 
-export function epsilon(i: number, d: number, e: number, p: number): number {
+export function epsilon({
+  i,
+  d,
+  e,
+  p,
+}: {
+  i: number;
+  d: number;
+  e: number;
+  p: number;
+}): number {
   if (d % e === 0 || i < d / e) return 1;
   return p;
 }

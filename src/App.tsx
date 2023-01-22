@@ -4,9 +4,10 @@ import * as Tabs from "@radix-ui/react-tabs";
 import {useReducer} from "react";
 
 import {macros} from "./macros";
+import {Tower} from "./tabs/Bands";
 import {FpMultSingle} from "./tabs/FpMultSingle";
 import {FpMultTable} from "./tabs/FpMultTable";
-import {Interlocking} from "./tabs/Interlocking";
+
 import "./styles.css";
 
 // for LaTeX
@@ -25,10 +26,19 @@ const tabs: TabData[] = [
   //   component: Interlocking,
   // },
   {
+    key: "can-phi",
+    title: (
+      <>
+        Actions of <$>\ \can\ </$> and <$>\ \varphi</$>
+      </>
+    ),
+    component: Tower,
+  },
+  {
     key: "fp-single",
     title: (
       <>
-        Mod-<$>{raw`p\ `}</$> ring structure (individual)
+        Mod-<$>{raw`p\ `}</$> individual products
       </>
     ),
     component: FpMultSingle,
@@ -37,7 +47,7 @@ const tabs: TabData[] = [
     key: "fp-table",
     title: (
       <>
-        Mod-<$>{raw`p\ `}</$> ring structure (table)
+        Mod-<$>{raw`p\ `}</$> times table
       </>
     ),
     component: FpMultTable,

@@ -29,7 +29,7 @@ h1 {
 }
 
 p {
-  margin: 1em 0;
+  margin: 0;
 }
 
 /* github links */
@@ -108,7 +108,7 @@ input[type="number"] {
 .products th,
 .products td {
   border: 1px solid #333;
-  padding: 0.2em 0.3em;
+  padding: 0 0.3em;
 }
 /* 
 .products th[rowspan] ~ td:nth-child(odd),
@@ -151,30 +151,29 @@ pre > code {
   flex-shrink: 0;
   display: flex;
   border-bottom: 1px solid purple;
-  margin: 1em 0;
+  margin: 1em 0 0;
 }
 
 .TabsTrigger {
+  --border-radius: 6px;
   all: unset;
   font-family: inherit;
   background-color: white;
   border: 1px solid #aaa;
-  padding: 0 20px;
   height: 45px;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
   line-height: 1;
   color: #aaa;
   user-select: none;
 }
 .TabsTrigger:first-child {
-  border-top-left-radius: 6px;
+  border-top-left-radius: var(--border-radius);
 }
 .TabsTrigger:last-child {
-  border-top-right-radius: 6px;
+  border-top-right-radius: var(--border-radius);
 }
 .TabsTrigger:hover {
   color: #000;
@@ -186,7 +185,7 @@ pre > code {
 }
 .TabsTrigger:focus {
   position: relative;
-  box-shadow: 0 0 0 2px black;
+  box-shadow: 0 0 0 1px black;
 }
 
 .TabsContent {
