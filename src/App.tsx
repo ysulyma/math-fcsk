@@ -3,11 +3,12 @@ import {KTX as $} from "@liqvid/katex/plain";
 import * as Tabs from "@radix-ui/react-tabs";
 import {useReducer} from "react";
 
-import {Tower} from "./tabs/Bands";
+import {Bands} from "./tabs/Bands";
 import {FpMultSingle} from "./tabs/FpMultSingle";
 import {FpMultTable} from "./tabs/FpMultTable";
 
 import "./styles.css";
+import {Interlocking} from "./tabs/Interlocking";
 
 // for LaTeX
 const {raw} = String;
@@ -19,11 +20,6 @@ interface TabData {
   component: (props: Ring) => JSX.Element;
 }
 const tabs: TabData[] = [
-  // {
-  //   key: "interlocking",
-  //   title: "Interlocking slopes",
-  //   component: Interlocking,
-  // },
   {
     key: "can-phi",
     title: (
@@ -31,7 +27,12 @@ const tabs: TabData[] = [
         Actions of <$>\ \can\ </$> and <$>\ \varphi</$>
       </>
     ),
-    component: Tower,
+    component: Bands,
+  },
+  {
+    key: "interlocking",
+    title: "Interlocking slopes",
+    component: Interlocking,
   },
   {
     key: "fp-single",
@@ -55,7 +56,10 @@ const tabs: TabData[] = [
 
 /** Which ring we're calculating for */
 export interface Ring {
+  /** Prime */
   p: number;
+
+  /** Exponent */
   e: number;
 }
 
@@ -95,7 +99,7 @@ export default function App() {
         <VarsTable {...ring} dispatch={dispatch} />
       </fieldset>
       {/* see https://www.radix-ui.com/docs/primitives/components/tabs */}
-      <Tabs.Root className="TabsRoot" defaultValue="can-phi">
+      <Tabs.Root className="TabsRoot" defaultValue="interlocking">
         <Tabs.List className="TabsList">
           {tabs.map((t) => (
             <Tabs.Trigger className="TabsTrigger" key={t.key} value={t.key}>

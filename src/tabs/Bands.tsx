@@ -10,7 +10,7 @@ import {brace, epsilon, fpow, logceil, logfloor} from "../utils";
 const {ceil, floor, max} = Math;
 const {raw} = String;
 
-export function Tower({e, p}: Ring) {
+export function Bands({e, p}: Ring) {
   const [i, setI] = useState(2);
   const [j, setJ] = useState(1);
   const [k, setK] = useState<0 | 1>(1);
@@ -20,13 +20,13 @@ export function Tower({e, p}: Ring) {
       <p>Figure 1 of the paper, also relevant in §5.3.</p>
       <Vars {...{i, j, k, p, setI, setJ, setK}} />
       <MJX>{macros}</MJX>
-      <Bands {...{e, i, j, k, p}} />
+      <Diagram {...{e, i, j, k, p}} />
     </>
   );
 }
 
 /** Display the p^* j sequence. */
-export function Bands({
+export function Diagram({
   e,
   i,
   j,
