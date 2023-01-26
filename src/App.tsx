@@ -1,9 +1,8 @@
 import {KTX as $} from "@liqvid/katex/plain";
-import {MJX} from "@liqvid/mathjax/plain";
+// import {MJX} from "@liqvid/mathjax/plain";
 import * as Tabs from "@radix-ui/react-tabs";
 import {useReducer} from "react";
 
-import {macros} from "./macros";
 import {Tower} from "./tabs/Bands";
 import {FpMultSingle} from "./tabs/FpMultSingle";
 import {FpMultTable} from "./tabs/FpMultTable";
@@ -92,12 +91,11 @@ export default function App() {
         </a>
         .
       </p>
-      <MJX>{macros}</MJX>
       <fieldset>
         <VarsTable {...ring} dispatch={dispatch} />
       </fieldset>
       {/* see https://www.radix-ui.com/docs/primitives/components/tabs */}
-      <Tabs.Root className="TabsRoot" defaultValue="fp-table">
+      <Tabs.Root className="TabsRoot" defaultValue="can-phi">
         <Tabs.List className="TabsList">
           {tabs.map((t) => (
             <Tabs.Trigger className="TabsTrigger" key={t.key} value={t.key}>
@@ -110,7 +108,12 @@ export default function App() {
           const Component = t.component;
 
           return (
-            <Tabs.Content className="TabsContent" key={t.key} value={t.key}>
+            <Tabs.Content
+              className="TabsContent"
+              forceMount
+              key={t.key}
+              value={t.key}
+            >
               <Component {...ring} />
             </Tabs.Content>
           );
@@ -135,16 +138,12 @@ function VarsTable({
     dispatch({e: parseInt(evt.currentTarget.value)});
   };
 
-  // const setRadio = (evt: React.ChangeEvent<HTMLInputElement>) => {
-  //   dispatch({mode: evt.currentTarget.value as Mode});
-  // };
-
   return (
     <table>
       <tbody>
         <tr>
           <th>
-            <MJX>p</MJX>
+            <$>p</$>
           </th>
           <td>
             <select value={p} onChange={setP}>
@@ -158,7 +157,7 @@ function VarsTable({
         </tr>
         <tr>
           <th>
-            <MJX>e</MJX>
+            <$>e</$>
           </th>
           <td>
             <input
@@ -171,37 +170,6 @@ function VarsTable({
             />
           </td>
         </tr>
-        {/* <tr>
-          <td>Mode</td>
-          <td>
-            <ul className="mode-list">
-              <li>
-                <label>
-                  <input
-                    checked={mode === "aa"}
-                    onChange={setRadio}
-                    name="mode"
-                    type="radio"
-                    value="aa"
-                  />{" "}
-                  <MJX>{`aa`}</MJX>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input
-                    checked={mode === "ab"}
-                    onChange={setRadio}
-                    name="mode"
-                    type="radio"
-                    value="ab"
-                  />{" "}
-                  <MJX>{`ab`}</MJX>
-                </label>
-              </li>
-            </ul>
-          </td>
-        </tr> */}
       </tbody>
     </table>
   );

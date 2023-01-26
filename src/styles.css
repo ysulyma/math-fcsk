@@ -29,7 +29,7 @@ h1 {
 }
 
 p {
-  margin: 0;
+  margin: 0.5em 0;
 }
 
 /* github links */
@@ -157,16 +157,17 @@ pre > code {
 .TabsTrigger {
   --border-radius: 6px;
   all: unset;
-  font-family: inherit;
+
+  align-items: center;
   background-color: white;
   border: 1px solid #aaa;
-  height: 45px;
-  flex: 1;
+  color: #aaa;
   display: flex;
-  align-items: center;
+  flex: 1;
+  font-family: inherit;
+  height: 45px;
   justify-content: center;
   line-height: 1;
-  color: #aaa;
   user-select: none;
 }
 .TabsTrigger:first-child {
@@ -193,4 +194,8 @@ pre > code {
   padding: 20px;
   background-color: white;
   outline: none;
+}
+
+.TabsContent[data-state="inactive"] {
+  display: none;
 }

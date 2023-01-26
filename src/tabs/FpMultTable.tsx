@@ -48,35 +48,37 @@ function ModeConfig({
   };
 
   return (
-    <fieldset>
-      Mode
-      <ul className="mode-list">
-        <li>
-          <label>
-            <input
-              checked={mode === "aa"}
-              onChange={setRadio}
-              name="mode"
-              type="radio"
-              value="aa"
-            />{" "}
-            <$>aa</$>
-          </label>
-        </li>
-        <li>
-          <label>
-            <input
-              checked={mode === "ab"}
-              onChange={setRadio}
-              name="mode"
-              type="radio"
-              value="ab"
-            />{" "}
-            <$>ab</$>
-          </label>
-        </li>
-      </ul>
-    </fieldset>
+    <form>
+      <fieldset>
+        Mode
+        <ul className="mode-list">
+          <li>
+            <label>
+              <input
+                checked={mode === "aa"}
+                onChange={setRadio}
+                name="mode"
+                type="radio"
+                value="aa"
+              />{" "}
+              <$>aa</$>
+            </label>
+          </li>
+          <li>
+            <label>
+              <input
+                checked={mode === "ab"}
+                onChange={setRadio}
+                name="mode"
+                type="radio"
+                value="ab"
+              />{" "}
+              <$>ab</$>
+            </label>
+          </li>
+        </ul>
+      </fieldset>
+    </form>
   );
 }
 
