@@ -1,7 +1,8 @@
 // all the code in this repo sucks,
 // but this one especially sucks
 import { KTX as $ } from "@liqvid/katex/plain";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useResizeObserver } from "usehooks-ts";
 
 import type { Ring } from "../App.tsx";
 
@@ -87,7 +88,7 @@ function Canvas({ p, m, n }: Config & Pick<Ring, "p">) {
   const xmax = 150;
   const ymax = 150;
 
-  useEffect(() => {
+  const redraw = useCallback(() => {
     // sizing
     const { height, width } = canvas.current.getBoundingClientRect();
     canvas.current.width = width;
@@ -101,6 +102,17 @@ function Canvas({ p, m, n }: Config & Pick<Ring, "p">) {
     drawSlopes({ ctx, height, m, n, p, width, xmax, ymax });
     drawAxes({ ctx, height, width, xmax, ymax });
   }, [p, m, n]);
+
+  useEffect(() => {
+    redraw();
+  }, [redraw]);
+
+  useResizeObserver({
+    onResize: redraw,
+
+    ref: canvas,
+  });
+
   return <canvas className="interlocking" ref={canvas} />;
 }
 
