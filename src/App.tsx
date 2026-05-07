@@ -1,5 +1,4 @@
 import { KTX as $ } from "@liqvid/katex/plain";
-// import {MJX} from "@liqvid/mathjax/plain";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useReducer } from "react";
 
@@ -145,11 +144,11 @@ function VarsTable({
   dispatch: React.Dispatch<Action>;
 }) {
   const setP = (evt: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({ p: parseInt(evt.currentTarget.value) });
+    dispatch({ p: parseInt(evt.currentTarget.value, 10) });
   };
 
   const setE = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ e: parseInt(evt.currentTarget.value) });
+    dispatch({ e: parseInt(evt.currentTarget.value, 10) });
   };
 
   return (

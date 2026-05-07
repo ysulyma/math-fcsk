@@ -5,28 +5,32 @@ import { useState } from "react";
 
 import type { Ring } from "../App.tsx";
 import { macros } from "../macros.ts";
-import { brace, epsilon, fpow, logceil, logfloor } from "../utils.ts";
+import { brace, epsilon, fpow, logceil, logfloor, valp } from "../utils.ts";
 
 const { ceil, floor, max } = Math;
 const { raw } = String;
+
+type Mode = "integral" | "mod-p";
 
 export function Bands({ e, p }: Ring) {
   const [i, setI] = useState(2);
   const [j, setJ] = useState(1);
   const [k, setK] = useState<0 | 1>(1);
+  const [mode, setMode] = useState<Mode>("integral");
 
   return (
     <>
       <p>Figure 1 of the paper, also relevant in §5.3.</p>
-      <Vars {...{ i, j, k, p, setI, setJ, setK }} />
+      <Vars {...{ i, j, k, mode, p, setI, setJ, setK, setMode }} />
       <MJX>{macros}</MJX>
-      <Diagram {...{ e, i, j, k, p }} />
+      <Diagram {...{ e, i, j, k, mode, p }} />
     </>
   );
 }
 
 /** Display the p^* j sequence. */
 export function Diagram({
+  mode,
   e,
   i,
   j,
@@ -38,7 +42,14 @@ export function Diagram({
 
   /** Cohomological degree */
   k: 0 | 1;
+
+  mode: Mode;
 }) {
+  // k=0 only valid for mod p coefficients
+  if (mode === "integral") {
+    k = 1;
+  }
+
   let doc = "";
 
   doc += raw`${"\\"}xymatrix@R=1em{`;
@@ -47,15 +58,20 @@ export function Diagram({
   // header
   {
     const row = [];
+    const prism = raw`\prism_{k[x]/x^{${e}}}`;
     row.push(
-      raw`${"\\"}underline{H^{${k}}(\mathcal N^{\ge${i}}\prism_{k[x]/x^{${e}}}/p)}`,
+      raw`${"\\"}underline{\mathrm H^{${k}}(\mathcal N^{\ge${i}}${prism}${mode === "mod-p" ? "/p" : ""})}`,
     );
-    row.push(raw`${"\\"}underline{H^{${k}}(\prism_{k[x]/x^{${e}}}/p)}`);
+    row.push(
+      raw`${"\\"}underline{\mathrm H^{${k}}(${prism}${mode === "mod-p" ? "/p" : ""})}`,
+    );
 
     rows.push(row.join(" & "));
   }
 
-  for (let a = 0; a <= 6; ++a) {
+  const NUM_ROWS = 6;
+
+  for (let a = 0; a <= NUM_ROWS; ++a) {
     /** Polynomial degree */
     const d = j * p ** a;
     const row = [];
@@ -86,7 +102,7 @@ export function Diagram({
       frac += raw`\dlog x`;
     }
 
-    let Nyg, normal;
+    let Nyg: string, normal: string;
 
     /** Image of the differential */
     const nygDiff = epsilon({ d, e, i, p }) * brace(d, e);
@@ -104,14 +120,16 @@ export function Diagram({
       Nyg += raw`\color{red}`;
     }
 
-    Nyg += raw`k\<`;
+    let mod = mode === "integral" ? `W/${p ** valp(nygDiff, p)}` : "k";
+
+    Nyg += raw`${mod}\<`;
     Nyg += raw`${fpow(p, max(0, i - hodge))}`;
     Nyg += raw`${frac}\>`;
     if (box) {
       Nyg += raw`}`;
     }
 
-    if (a !== 6) {
+    if (a !== NUM_ROWS) {
       const diag = i >= hodge ? "" : "@{..>}";
       Nyg += raw` \ar${diag}@(r,l)[dr]`;
     }
@@ -124,7 +142,8 @@ export function Diagram({
     if (diff % p !== 0) {
       normal += raw`\color{lightgray}`;
     }
-    normal += raw`k\<${frac}\>`;
+    mod = mode === "integral" ? `W/${p ** valp(diff, p)}` : "k";
+    normal += raw`${mod}\<${frac}\>`;
     // if (diff === 1) normal = raw`\phantom{${normal}}`;
 
     row.push(Nyg, normal);
@@ -135,7 +154,7 @@ export function Diagram({
   doc += rows.join(" \\\\ ");
   doc += raw`}`;
 
-  // the author of @liqvid/mathjax is a dumbass, so this
+  // the author of @liqvid/mathjax is a fool, so this
   // won't work without span
   return (
     <MJX display span>
@@ -149,18 +168,22 @@ export function Vars({
   j,
   k,
   p,
+  mode,
   setI,
   setJ,
   setK,
+  setMode,
 }: {
   i: number;
   j: number;
   k: 0 | 1;
   p: number;
+  mode: Mode;
 
   setI: React.Dispatch<React.SetStateAction<number>>;
   setJ: React.Dispatch<React.SetStateAction<number>>;
   setK: React.Dispatch<React.SetStateAction<0 | 1>>;
+  setMode: React.Dispatch<React.SetStateAction<Mode>>;
 }) {
   const jOptions = range(1, 26).filter((j) => j % p !== 0);
 
@@ -176,11 +199,21 @@ export function Vars({
               <input
                 max={10}
                 min={1}
-                onChange={(evt) => setI(parseInt(evt.currentTarget.value))}
+                onChange={(evt) => setI(parseInt(evt.currentTarget.value, 10))}
                 step={1}
                 type="number"
                 value={i}
               />
+            </td>
+            <td>coefficients</td>
+            <td>
+              <select
+                onChange={(evt) => setMode(evt.currentTarget.value as Mode)}
+                value={mode}
+              >
+                <option value="integral">integral</option>
+                <option value="mod-p">mod p</option>
+              </select>
             </td>
           </tr>
           <tr>
@@ -189,7 +222,7 @@ export function Vars({
             </td>
             <td>
               <select
-                onChange={(evt) => setJ(parseInt(evt.currentTarget.value))}
+                onChange={(evt) => setJ(parseInt(evt.currentTarget.value, 10))}
                 value={j}
               >
                 {jOptions.map((j) => (
@@ -199,22 +232,24 @@ export function Vars({
                 ))}
               </select>
             </td>
-          </tr>
-          <tr>
-            <td>
-              <$>k</$>
-            </td>
-            <td>
-              <select
-                onChange={(evt) =>
-                  setK(parseInt(evt.currentTarget.value) as 0 | 1)
-                }
-                value={k}
-              >
-                <option value={0}>0</option>
-                <option value={1}>1</option>
-              </select>
-            </td>
+            {mode === "mod-p" && (
+              <>
+                <td>
+                  <$>k</$>
+                </td>
+                <td>
+                  <select
+                    onChange={(evt) =>
+                      setK(parseInt(evt.currentTarget.value, 10) as 0 | 1)
+                    }
+                    value={k}
+                  >
+                    <option value={0}>0</option>
+                    <option value={1}>1</option>
+                  </select>
+                </td>
+              </>
+            )}
           </tr>
         </tbody>
       </table>

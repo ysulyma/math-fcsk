@@ -27,17 +27,17 @@ function VarsTable({
   setN,
 }: Config & { setM: (m: number) => void; setN: (n: number) => void }) {
   const onChangeM = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(evt.currentTarget.value);
+    const value = parseInt(evt.currentTarget.value, 10);
 
-    if (!isNaN(value)) {
+    if (!Number.isNaN(value)) {
       setM(value);
     }
   };
 
   const onChangeN = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(evt.currentTarget.value);
+    const value = parseInt(evt.currentTarget.value, 10);
 
-    if (!isNaN(value)) {
+    if (!Number.isNaN(value)) {
       setN(value);
     }
   };
@@ -186,8 +186,8 @@ function drawBars({
 
   // bars
   for (let j = 1; j <= xmax; ++j) {
-    let min = 0,
-      max;
+    let min = 0;
+    let max: number | undefined;
     // skip divisible by p
     if (j % p === 0) continue;
     // denominator bars
@@ -254,7 +254,7 @@ function drawSlopes({
 function drawVanishingRegions({
   ctx,
   xmax,
-  ymax,
+  // ymax,
   height,
   width,
   m,

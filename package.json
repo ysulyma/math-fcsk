@@ -26,7 +26,7 @@
     "@types/react-dom": "18.0.10",
     "@types/react-katex": "^3.0.0",
     "@vitejs/plugin-react-swc": "^3.0.1",
-    "typescript": "^4",
+    "typescript": "^5",
     "vite": "^4.0.4"
   },
   "type": "module",

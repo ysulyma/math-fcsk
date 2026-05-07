@@ -58,7 +58,7 @@ export function FpMultSingle({ e, p }: Ring) {
       <p>
         §5.3 of the paper. We write <$>{raw`n? \mathrel{\ :=\ } (n-1)!`}</$> for
         the Gamma function. We fade terms which vanish in{" "}
-        <$>{raw`H^*(\Nyg^{\ge i}\prism_R/p)`}</$>.
+        <$>{raw`\H^*(\Nyg^{\ge i}\prism_R/p)`}</$>.
       </p>
       <fieldset>
         <VarsTable {...state} {...{ dispatch, e, p }} />
@@ -132,19 +132,19 @@ function TermsTable({
   const jOptions = range(1, 51).filter((j) => j % p !== 0);
 
   const setI1 = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ i1: parseInt(evt.currentTarget.value) });
+    dispatch({ i1: parseInt(evt.currentTarget.value, 10) });
   };
 
   const setI2 = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ i2: parseInt(evt.currentTarget.value) });
+    dispatch({ i2: parseInt(evt.currentTarget.value, 10) });
   };
 
   const setJ1 = (evt: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({ j1: parseInt(evt.currentTarget.value) });
+    dispatch({ j1: parseInt(evt.currentTarget.value, 10) });
   };
 
   const setJ2 = (evt: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({ j2: parseInt(evt.currentTarget.value) });
+    dispatch({ j2: parseInt(evt.currentTarget.value, 10) });
   };
 
   return (

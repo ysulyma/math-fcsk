@@ -26,7 +26,6 @@ export function FpMultTable({ e, p }: Ring) {
 
   return (
     <>
-      <h2></h2>
       <p>§5.3 of the paper.</p>
       <ModeConfig {...{ mode, setMode }} />
       <TimesTable {...{ e, mode, p }} />

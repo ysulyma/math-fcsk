@@ -2,13 +2,11 @@ import { protect } from "./latex.ts";
 import {
   brace,
   epsilon,
-  factorial,
   fpow,
   legendre,
   logceil,
   logfloor,
   reduceP,
-  valp,
 } from "./utils.ts";
 
 const { ceil, floor, max } = Math;
