@@ -13,9 +13,11 @@ import { Interlocking } from "./tabs/Interlocking.tsx";
 // for LaTeX
 const { raw } = String;
 
+type TabKey = "can-phi" | "interlocking" | "fp-single" | "fp-table";
+
 // tabs
 interface TabData {
-  key: string;
+  key: TabKey;
   title: React.ReactNode;
   component: (props: Ring) => JSX.Element;
 }
@@ -107,7 +109,7 @@ export default function App() {
         <VarsTable {...ring} dispatch={dispatch} />
       </fieldset>
       {/* see https://www.radix-ui.com/docs/primitives/components/tabs */}
-      <Tabs.Root className="TabsRoot" defaultValue="interlocking">
+      <Tabs.Root className="TabsRoot" defaultValue={"can-phi" satisfies TabKey}>
         <Tabs.List className="TabsList">
           {tabs.map((t) => (
             <Tabs.Trigger className="TabsTrigger" key={t.key} value={t.key}>
