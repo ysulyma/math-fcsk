@@ -1,18 +1,18 @@
-import {protect} from "./latex";
+import { protect } from "./latex.ts";
 import {
   brace,
-  logceil,
-  logfloor,
+  epsilon,
   factorial,
   fpow,
-  valp,
-  reduceP,
-  epsilon,
   legendre,
-} from "./utils";
+  logceil,
+  logfloor,
+  reduceP,
+  valp,
+} from "./utils.ts";
 
-const {ceil, floor, max} = Math;
-const {raw} = String;
+const { ceil, floor, max } = Math;
+const { raw } = String;
 
 export interface GeneratorName {
   i: number;
@@ -32,7 +32,7 @@ export interface Term {
  * Get the generator of $H^k(\F_p(i)_j)$
  */
 export function fpiGenerator({
-  gen: {i, j, k},
+  gen: { i, j, k },
   e,
   p,
 }: {
@@ -54,7 +54,7 @@ export function fpiGenerator({
     const d = p ** r * j;
 
     /** Image of the differential */
-    const nygDiff = epsilon({i, d, e, p}) * brace(d, e);
+    const nygDiff = epsilon({ d, e, i, p }) * brace(d, e);
 
     // only include cocyles
     if (nygDiff % p === 0) {
@@ -93,18 +93,23 @@ export function nygGenerator({
   const hodge = k === 0 ? floor(d / e) : ceil(d / e);
 
   return {
-    pPower: max(0, i - hodge),
     degree: d,
-    denomValP: legendre(hodge - k, p),
     denomString: hodge + "!?"[k],
+    denomValP: legendre(hodge - k, p),
     dlog: k === 1,
+    pPower: max(0, i - hodge),
   };
 }
 
 /**
  * Format a {@link Term term}.
  */
-export function formatTerm({pPower, degree, denomString, dlog}: Term): string {
+export function formatTerm({
+  pPower,
+  degree,
+  denomString,
+  dlog,
+}: Term): string {
   let str = "";
 
   str += fpow("p", pPower);
@@ -129,11 +134,11 @@ export function formatTerm({pPower, degree, denomString, dlog}: Term): string {
  */
 export function multiplyTerms(a: Term, b: Term): Term {
   return {
-    pPower: a.pPower + b.pPower,
     degree: a.degree + b.degree,
-    denomValP: a.denomValP + b.denomValP,
     denomString: `${a.denomString}${b.denomString}`,
+    denomValP: a.denomValP + b.denomValP,
     dlog: a.dlog || b.dlog,
+    pPower: a.pPower + b.pPower,
   };
 }
 
@@ -160,8 +165,8 @@ export function syntomicProduct({
 }): GeneratorName[] {
   const generators: GeneratorName[] = [];
 
-  const sum1 = fpiGenerator({gen: gen1, e, p});
-  const sum2 = fpiGenerator({gen: gen2, e, p});
+  const sum1 = fpiGenerator({ e, gen: gen1, p });
+  const sum2 = fpiGenerator({ e, gen: gen2, p });
 
   if (sum1.length === 0 || sum2.length === 0) {
     return [];
@@ -189,9 +194,9 @@ export function syntomicProduct({
 
     if (valTerm(product) === valTerm(nyg)) {
       generators.push({
-        k: gen1.k + gen2.k,
         i: gen1.i + gen2.i,
         j: reduceP(product.degree, p),
+        k: gen1.k + gen2.k,
       });
     }
   }

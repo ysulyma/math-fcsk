@@ -1,17 +1,17 @@
-import {KTX as $} from "@liqvid/katex/plain";
+import { KTX as $ } from "@liqvid/katex/plain";
 // import {MJX} from "@liqvid/mathjax/plain";
 import * as Tabs from "@radix-ui/react-tabs";
-import {useReducer} from "react";
+import { useReducer } from "react";
 
-import {Bands} from "./tabs/Bands";
-import {FpMultSingle} from "./tabs/FpMultSingle";
-import {FpMultTable} from "./tabs/FpMultTable";
+import { Bands } from "./tabs/Bands.tsx";
+import { FpMultSingle } from "./tabs/FpMultSingle.tsx";
+import { FpMultTable } from "./tabs/FpMultTable.tsx";
 
 import "./styles.css";
-import {Interlocking} from "./tabs/Interlocking";
+import { Interlocking } from "./tabs/Interlocking.tsx";
 
 // for LaTeX
-const {raw} = String;
+const { raw } = String;
 
 // tabs
 interface TabData {
@@ -21,36 +21,36 @@ interface TabData {
 }
 const tabs: TabData[] = [
   {
+    component: Bands,
     key: "can-phi",
     title: (
       <>
         Actions of <$>\ \can\ </$> and <$>\ \varphi</$>
       </>
     ),
-    component: Bands,
   },
   {
+    component: Interlocking,
     key: "interlocking",
     title: "Interlocking slopes",
-    component: Interlocking,
   },
   {
+    component: FpMultSingle,
     key: "fp-single",
     title: (
       <>
         Mod-<$>{raw`p\ `}</$> individual products
       </>
     ),
-    component: FpMultSingle,
   },
   {
+    component: FpMultTable,
     key: "fp-table",
     title: (
       <>
         Mod-<$>{raw`p\ `}</$> times table
       </>
     ),
-    component: FpMultTable,
   },
 ];
 
@@ -66,12 +66,12 @@ export interface Ring {
 type Action = Partial<Ring>;
 
 function reducer(state: Ring, action: Action): Ring {
-  return {...state, ...action};
+  return { ...state, ...action };
 }
 
 const initialState: Ring = {
-  p: 2,
   e: 4,
+  p: 2,
 };
 
 // pretty sure this is all of them
@@ -85,12 +85,20 @@ export default function App() {
       <p>
         These are interactive widgets to explore the results/figures in my paper{" "}
         <cite>
-          <a href="https://arxiv.org/abs/2110.04978" target="_blank">
+          <a
+            href="https://arxiv.org/abs/2110.04978"
+            rel="noopener"
+            target="_blank"
+          >
             Floor, ceiling, slopes, and <$>K</$>-theory
           </a>
         </cite>
         . The source code is available{" "}
-        <a href="https://github.com/ysulyma/math-fcsk" target="_blank">
+        <a
+          href="https://github.com/ysulyma/math-fcsk"
+          rel="noopener"
+          target="_blank"
+        >
           on GitHub
         </a>
         .
@@ -135,11 +143,11 @@ function VarsTable({
   dispatch: React.Dispatch<Action>;
 }) {
   const setP = (evt: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({p: parseInt(evt.currentTarget.value)});
+    dispatch({ p: parseInt(evt.currentTarget.value) });
   };
 
   const setE = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({e: parseInt(evt.currentTarget.value)});
+    dispatch({ e: parseInt(evt.currentTarget.value) });
   };
 
   return (
@@ -150,7 +158,7 @@ function VarsTable({
             <$>p</$>
           </th>
           <td>
-            <select value={p} onChange={setP}>
+            <select onChange={setP} value={p}>
               {primes.map((p) => (
                 <option key={p} value={p}>
                   {p}
@@ -165,12 +173,12 @@ function VarsTable({
           </th>
           <td>
             <input
-              type="number"
-              min={2}
               max={12}
-              step={1}
-              value={e}
+              min={2}
               onChange={setE}
+              step={1}
+              type="number"
+              value={e}
             />
           </td>
         </tr>

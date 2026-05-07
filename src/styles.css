@@ -1,7 +1,7 @@
 * {
   box-sizing: border-box;
-  margin: 0;
   padding: 0;
+  margin: 0;
 }
 
 :root {
@@ -13,8 +13,8 @@ body {
 }
 
 .App {
-  font-family: sans-serif;
   padding: 1em;
+  font-family: sans-serif;
 }
 
 /* text styles */
@@ -33,17 +33,16 @@ p {
 }
 
 /* github links */
-:link[href^="https://github.com"]::before
-{
+:link[href^="https://github.com"]::before {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.25em;
+  vertical-align: middle;
   content: "";
   background-image: url("/github-icon.svg");
   background-repeat: no-repeat;
   background-size: 100%;
-  display: inline-block;
-  height: 1em;
-  margin-right: 0.25em;
-  width: 1em;
-  vertical-align: middle;
 }
 
 /* ui */
@@ -52,8 +51,8 @@ p {
 }
 
 fieldset {
-  margin: 0.5em auto;
   padding: 0.5em;
+  margin: 0.5em auto;
 }
 
 fieldset table {
@@ -62,14 +61,14 @@ fieldset table {
 
 fieldset td {
   padding: 0 0.5em;
-  text-align: right;
   vertical-align: top;
+  text-align: right;
 }
 
 .mode-list {
+  text-align: left;
   list-style: none;
   list-style-position: outside;
-  text-align: left;
 }
 
 input[type="number"] {
@@ -83,19 +82,19 @@ input[type="number"] {
 
 /* \prism */
 .prism {
-  background-image: url("data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%2035.795%2044%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20style%3D%22color%3A%23000%3Bfill%3A%23000%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B-inkscape-stroke%3Anone%22%20d%3D%22M76.965%20122.135a1.05%201.05%200%200%200-.974.66l-14.717%2036.741a1.05%201.05%200%200%200%20.974%201.442l29.517.023a1.05%201.05%200%200%200%20.976-1.441L77.94%20122.794a1.05%201.05%200%200%200-.975-.659zm.005%203.87%202.544%206.32-10.65%2026.557-5.065-.004zm3.624%209.004%209.618%2023.89-19.194-.015z%22%20transform%3D%22translate(-59.11%20-119.568)%22%2F%3E%3C%2Fsvg%3E");
-  color: transparent;
-  height: 1em;
   width: calc(1em * 35.795 / 44);
-  background-repeat: no-repeat;
+  height: 1em;
   vertical-align: text-bottom;
+  color: transparent;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%2035.795%2044%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20style%3D%22color%3A%23000%3Bfill%3A%23000%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B-inkscape-stroke%3Anone%22%20d%3D%22M76.965%20122.135a1.05%201.05%200%200%200-.974.66l-14.717%2036.741a1.05%201.05%200%200%200%20.974%201.442l29.517.023a1.05%201.05%200%200%200%20.976-1.441L77.94%20122.794a1.05%201.05%200%200%200-.975-.659zm.005%203.87%202.544%206.32-10.65%2026.557-5.065-.004zm3.624%209.004%209.618%2023.89-19.194-.015z%22%20transform%3D%22translate(-59.11%20-119.568)%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
 }
 
 /* products table */
 .products {
-  border-collapse: collapse;
-  font-size: 0.8em;
   margin: 1em 0;
+  font-size: 0.8em;
+  border-collapse: collapse;
 }
 
 .products th {
@@ -112,8 +111,8 @@ input[type="number"] {
 
 .products th,
 .products td {
-  border: 1px solid #333;
   padding: 0 0.3em;
+  border: 1px solid #333;
 }
 /* 
 .products th[rowspan] ~ td:nth-child(odd),
@@ -135,15 +134,15 @@ input[type="number"] {
 }
 
 pre > code {
+  display: block;
+  max-height: 400px;
+  padding: 0.5em;
+  margin: 1em auto;
+  overflow: auto;
+  color: #fff;
   background-color: #645757;
   border-radius: 3px;
   box-shadow: 0 0 0.5em inset #0004;
-  color: #fff;
-  display: block;
-  margin: 1em auto;
-  max-height: 400px;
-  overflow: auto;
-  padding: 0.5em;
 }
 
 .TabsRoot {
@@ -153,27 +152,27 @@ pre > code {
 }
 
 .TabsList {
-  flex-shrink: 0;
   display: flex;
-  border-bottom: 1px solid purple;
+  flex-shrink: 0;
   margin: 1em 0 0;
+  border-bottom: 1px solid purple;
 }
 
 .TabsTrigger {
   --border-radius: 6px;
   all: unset;
-
-  align-items: center;
-  background-color: white;
-  border: 1px solid #aaa;
-  color: #aaa;
   display: flex;
   flex: 1;
-  font-family: inherit;
-  height: 45px;
+
+  align-items: center;
   justify-content: center;
+  height: 45px;
+  font-family: inherit;
   line-height: 1;
+  color: #aaa;
   user-select: none;
+  background-color: white;
+  border: 1px solid #aaa;
 }
 .TabsTrigger:first-child {
   border-top-left-radius: var(--border-radius);
@@ -185,9 +184,11 @@ pre > code {
   color: #000;
 }
 .TabsTrigger[data-state="active"] {
-  background-color: purple;
   color: #fff;
-  box-shadow: inset 0 -1px 0 0 currentColor, 0 1px 0 0 currentColor;
+  background-color: purple;
+  box-shadow:
+    inset 0 -1px 0 0 currentColor,
+    0 1px 0 0 currentColor;
 }
 .TabsTrigger:focus {
   position: relative;
@@ -197,8 +198,8 @@ pre > code {
 .TabsContent {
   flex-grow: 1;
   padding: 20px;
-  background-color: white;
   outline: none;
+  background-color: white;
 }
 
 .TabsContent[data-state="inactive"] {
@@ -207,8 +208,8 @@ pre > code {
 
 /* interlocking */
 .interlocking {
-  aspect-ratio: 1;
   display: block;
-  margin: 0 auto;
   width: 40%;
+  aspect-ratio: 1;
+  margin: 0 auto;
 }

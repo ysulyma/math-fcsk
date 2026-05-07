@@ -1,21 +1,21 @@
-import {KTX as $} from "@liqvid/katex/plain";
-import {range} from "@liqvid/utils/misc";
-import {useReducer} from "react";
+import { KTX as $ } from "@liqvid/katex/plain";
+import { range } from "@liqvid/utils/misc";
+import { useReducer } from "react";
 
-import {Ring} from "../App";
+import type { Ring } from "../App.tsx";
 import {
   formatGen,
   formatTerm,
   fpiGenerator,
-  GeneratorName,
+  type GeneratorName,
   multiplyTerms,
   nygGenerator,
   syntomicProduct,
   valTerm,
-} from "../generators";
-import {formatSum} from "../latex";
+} from "../generators.ts";
+import { formatSum } from "../latex.ts";
 
-const {raw} = String;
+const { raw } = String;
 
 /**
  * What type of product to show.
@@ -35,20 +35,19 @@ interface State {
 type Action = Partial<State>;
 
 function reducer(state: State, action: Action): State {
-  return {...state, ...action};
+  return { ...state, ...action };
 }
 
 const initialState: State = {
-  mode: "aa",
-
   i1: 2,
-  j1: 1,
 
   i2: 2,
+  j1: 1,
   j2: 3,
+  mode: "aa",
 };
 
-export function FpMultSingle({e, p}: Ring) {
+export function FpMultSingle({ e, p }: Ring) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
@@ -62,10 +61,10 @@ export function FpMultSingle({e, p}: Ring) {
         <$>{raw`H^*(\Nyg^{\ge i}\prism_R/p)`}</$>.
       </p>
       <fieldset>
-        <VarsTable {...state} {...{e, p, dispatch}} />
-        <TermsTable {...state} {...{e, p, dispatch}} />
+        <VarsTable {...state} {...{ dispatch, e, p }} />
+        <TermsTable {...state} {...{ dispatch, e, p }} />
       </fieldset>
-      <Equations {...state} {...{e, p}} />
+      <Equations {...state} {...{ e, p }} />
     </>
   );
 }
@@ -79,7 +78,7 @@ function VarsTable({
   dispatch: React.Dispatch<Action>;
 }) {
   const setRadio = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({mode: evt.currentTarget.value as Mode});
+    dispatch({ mode: evt.currentTarget.value as Mode });
   };
 
   console.log(mode);
@@ -93,8 +92,8 @@ function VarsTable({
             <label>
               <input
                 checked={mode === "aa"}
-                onChange={setRadio}
                 name="mode"
+                onChange={setRadio}
                 type="radio"
                 value="aa"
               />{" "}
@@ -105,8 +104,8 @@ function VarsTable({
             <label>
               <input
                 checked={mode === "ab"}
-                onChange={setRadio}
                 name="mode"
+                onChange={setRadio}
                 type="radio"
                 value="ab"
               />{" "}
@@ -133,19 +132,19 @@ function TermsTable({
   const jOptions = range(1, 51).filter((j) => j % p !== 0);
 
   const setI1 = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({i1: parseInt(evt.currentTarget.value)});
+    dispatch({ i1: parseInt(evt.currentTarget.value) });
   };
 
   const setI2 = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({i2: parseInt(evt.currentTarget.value)});
+    dispatch({ i2: parseInt(evt.currentTarget.value) });
   };
 
   const setJ1 = (evt: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({j1: parseInt(evt.currentTarget.value)});
+    dispatch({ j1: parseInt(evt.currentTarget.value) });
   };
 
   const setJ2 = (evt: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({j2: parseInt(evt.currentTarget.value)});
+    dispatch({ j2: parseInt(evt.currentTarget.value) });
   };
 
   return (
@@ -157,11 +156,11 @@ function TermsTable({
           </td>
           <td>
             <input
-              onChange={setI1}
-              type="number"
-              min={1}
               max={10}
+              min={1}
+              onChange={setI1}
               step={1}
+              type="number"
               value={i1}
             />
           </td>
@@ -170,11 +169,11 @@ function TermsTable({
           </td>
           <td>
             <input
-              onChange={setI2}
-              type="number"
-              min={1}
               max={10}
+              min={1}
+              onChange={setI2}
               step={1}
+              type="number"
               value={i2}
             />
           </td>
@@ -184,7 +183,7 @@ function TermsTable({
             <$>j_1</$>
           </td>
           <td>
-            <select value={j1} onChange={setJ1}>
+            <select onChange={setJ1} value={j1}>
               {jOptions.map((j) => (
                 <option key={j} value={j}>
                   {j}
@@ -196,7 +195,7 @@ function TermsTable({
             <$>j_2</$>
           </td>
           <td>
-            <select value={j2} onChange={setJ2}>
+            <select onChange={setJ2} value={j2}>
               {jOptions.map((j) => (
                 <option key={j} value={j}>
                   {j}
@@ -210,7 +209,7 @@ function TermsTable({
   );
 }
 
-function Equations({mode, i1, j1, i2, j2, e, p}: Ring & State) {
+function Equations({ mode, i1, j1, i2, j2, e, p }: Ring & State) {
   const indent = " ".repeat(2);
   const newline = "\n";
 
@@ -224,7 +223,7 @@ function Equations({mode, i1, j1, i2, j2, e, p}: Ring & State) {
     k: 0,
   };
   const a1 = formatGen(gen1);
-  const explicit1 = fpiGenerator({e, p, gen: gen1});
+  const explicit1 = fpiGenerator({ e, gen: gen1, p });
   tex += raw`${indent}${a1} &= ${formatSum(
     explicit1.map(formatTerm),
   )}\\[${spacing}]${newline}`;
@@ -236,7 +235,7 @@ function Equations({mode, i1, j1, i2, j2, e, p}: Ring & State) {
     k: mode === "aa" ? 0 : 1,
   };
   const ab2 = formatGen(gen2);
-  const explicit2 = fpiGenerator({e, p, gen: gen2});
+  const explicit2 = fpiGenerator({ e, gen: gen2, p });
   tex += raw`${indent}${ab2} &= ${formatSum(
     explicit2.map(formatTerm),
   )}\\[${spacing}]${newline}`;
@@ -287,9 +286,9 @@ function Equations({mode, i1, j1, i2, j2, e, p}: Ring & State) {
 
   // product, simplified
   const final = syntomicProduct({
+    e,
     gen1,
     gen2,
-    e,
     p,
   });
   tex += raw` &= ${formatSum(final.map(formatGen))}`;

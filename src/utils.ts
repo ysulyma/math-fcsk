@@ -1,4 +1,4 @@
-const {floor} = Math;
+const { floor } = Math;
 
 /** Get the p-adic valuation of n! */
 export function legendre(n: number, p: number): number {

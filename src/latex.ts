@@ -9,7 +9,7 @@ export function formatSum(summands: string[]): string {
   return summands.join(" + ");
 }
 
-export function protect<T extends {toString(): string}>(x: T): string {
+export function protect<T extends { toString(): string }>(x: T): string {
   if (x.toString().length > 1) {
     return `{${x}}`;
   }

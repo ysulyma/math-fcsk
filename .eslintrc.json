@@ -4,12 +4,8 @@
     "plugin:import/recommended",
     "prettier"
   ],
-  "plugins": [
-    "import",
-    "prettier"
-  ],
+  "plugins": ["import", "prettier"],
   "rules": {
-    "prettier/prettier": "warn",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-unused-vars": "error",
@@ -33,23 +29,21 @@
         "newlines-between": "always",
         "pathGroups": [
           {
-            "pattern": "*.css",
             "group": "unknown",
-            "position": "after",
+            "pattern": "*.css",
             "patternOptions": {
               "matchBase": true
-            }
+            },
+            "position": "after"
           }
         ]
       }
-    ]
+    ],
+    "prettier/prettier": "warn"
   },
   "settings": {
     "import/parsers": {
-      "@typescript-eslint/parser": [
-        ".ts",
-        ".tsx"
-      ]
+      "@typescript-eslint/parser": [".ts", ".tsx"]
     },
     "import/resolver": "typescript"
   }

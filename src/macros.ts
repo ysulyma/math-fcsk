@@ -1,4 +1,4 @@
-const {raw} = String;
+const { raw } = String;
 
 export const macros = raw`
 % misc

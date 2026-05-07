@@ -1,31 +1,31 @@
 // all the code in this repo sucks,
 // but this one especially sucks
-import {KTX as $} from "@liqvid/katex/plain";
-import {useEffect, useRef, useState} from "react";
+import { KTX as $ } from "@liqvid/katex/plain";
+import { useEffect, useRef, useState } from "react";
 
-import {Ring} from "../App";
+import type { Ring } from "../App.tsx";
 
-export function Interlocking({p}: Ring) {
+export function Interlocking({ p }: Ring) {
   const [m, setM] = useState(12);
   const [n, setN] = useState(11);
 
   return (
     <>
       <p>§5.2 of the paper.</p>
-      <VarsTable {...{m, n, setM, setN}} />
-      <Canvas {...{p, m, n}} />
+      <VarsTable {...{ m, n, setM, setN }} />
+      <Canvas {...{ m, n, p }} />
     </>
   );
 }
 
-type Config = {m: number; n: number};
+type Config = { m: number; n: number };
 
 function VarsTable({
   m,
   n,
   setM,
   setN,
-}: Config & {setM: (m: number) => void; setN: (n: number) => void}) {
+}: Config & { setM: (m: number) => void; setN: (n: number) => void }) {
   const onChangeM = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(evt.currentTarget.value);
 
@@ -52,11 +52,11 @@ function VarsTable({
             </td>
             <td>
               <input
-                onChange={onChangeM}
-                type="number"
-                min={n + 1}
                 max={20}
+                min={n + 1}
+                onChange={onChangeM}
                 step={1}
+                type="number"
                 value={m}
               />
             </td>
@@ -67,11 +67,11 @@ function VarsTable({
             </td>
             <td>
               <input
-                onChange={onChangeN}
-                type="number"
-                min={2}
                 max={m - 1}
+                min={2}
+                onChange={onChangeN}
                 step={1}
+                type="number"
                 value={n}
               />
             </td>
@@ -82,24 +82,24 @@ function VarsTable({
   );
 }
 
-function Canvas({p, m, n}: Config & Pick<Ring, "p">) {
+function Canvas({ p, m, n }: Config & Pick<Ring, "p">) {
   const canvas = useRef() as React.MutableRefObject<HTMLCanvasElement>;
   const xmax = 150;
   const ymax = 150;
 
   useEffect(() => {
     // sizing
-    const {height, width} = canvas.current.getBoundingClientRect();
+    const { height, width } = canvas.current.getBoundingClientRect();
     canvas.current.width = width;
     canvas.current.height = height;
 
     // draw
     const ctx = canvas.current.getContext("2d")!;
 
-    drawVanishingRegions({ctx, xmax, ymax, height, width, p, m, n});
-    drawBars({ctx, xmax, ymax, height, width, p, m, n});
-    drawSlopes({ctx, xmax, ymax, height, width, p, m, n});
-    drawAxes({ctx, xmax, ymax, height, width});
+    drawVanishingRegions({ ctx, height, m, n, p, width, xmax, ymax });
+    drawBars({ ctx, height, m, n, p, width, xmax, ymax });
+    drawSlopes({ ctx, height, m, n, p, width, xmax, ymax });
+    drawAxes({ ctx, height, width, xmax, ymax });
   }, [p, m, n]);
   return <canvas className="interlocking" ref={canvas} />;
 }
@@ -115,7 +115,7 @@ function drawAxes({
   ymax,
   height,
   width,
-}: Dims & {ctx: CanvasRenderingContext2D; xmax: number; ymax: number}): void {
+}: Dims & { ctx: CanvasRenderingContext2D; xmax: number; ymax: number }): void {
   const padding = width / 8;
   const offset = padding / 5;
 
@@ -192,11 +192,11 @@ function drawBars({
     if (j % p === 0) continue;
     // denominator bars
     for (let i = 0; i <= ymax; ++i) {
-      if (s({p, k: n, i, j}) === 0) {
+      if (s({ i, j, k: n, p }) === 0) {
         min = i;
         continue;
       }
-      if (alpha({m, n, p, i, j}) >= s({p, k: n, i, j})) {
+      if (alpha({ i, j, m, n, p }) >= s({ i, j, k: n, p })) {
         max = i;
         break;
       }
@@ -292,7 +292,7 @@ function s({
   i,
   j,
   k,
-}: Pick<Ring, "p"> & {k: number; i: number; j: number}): number {
+}: Pick<Ring, "p"> & { k: number; i: number; j: number }): number {
   if (j > k * (i + 1)) return 0;
   for (let r = 1; ; ++r) {
     if (p ** r * j > k * (i + 1)) return r;
@@ -309,10 +309,10 @@ function alpha({
   p,
   i,
   j,
-}: Config & Pick<Ring, "p"> & {i: number; j: number}): number {
+}: Config & Pick<Ring, "p"> & { i: number; j: number }): number {
   let sum = 0;
   for (let h = 0; h < i; ++h) {
-    sum += s({k: m, i: h, j, p}) - s({k: n, i: h, j, p});
+    sum += s({ i: h, j, k: m, p }) - s({ i: h, j, k: n, p });
   }
   return sum;
 }

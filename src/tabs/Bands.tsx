@@ -1,16 +1,16 @@
-import {KTX as $} from "@liqvid/katex/plain";
-import {MJX} from "@liqvid/mathjax/plain";
-import {between, range} from "@liqvid/utils/misc";
-import {useState} from "react";
+import { KTX as $ } from "@liqvid/katex/plain";
+import { MJX } from "@liqvid/mathjax/plain";
+import { between, range } from "@liqvid/utils/misc";
+import { useState } from "react";
 
-import {Ring} from "../App";
-import {macros} from "../macros";
-import {brace, epsilon, fpow, logceil, logfloor} from "../utils";
+import type { Ring } from "../App.tsx";
+import { macros } from "../macros.ts";
+import { brace, epsilon, fpow, logceil, logfloor } from "../utils.ts";
 
-const {ceil, floor, max} = Math;
-const {raw} = String;
+const { ceil, floor, max } = Math;
+const { raw } = String;
 
-export function Bands({e, p}: Ring) {
+export function Bands({ e, p }: Ring) {
   const [i, setI] = useState(2);
   const [j, setJ] = useState(1);
   const [k, setK] = useState<0 | 1>(1);
@@ -18,9 +18,9 @@ export function Bands({e, p}: Ring) {
   return (
     <>
       <p>Figure 1 of the paper, also relevant in §5.3.</p>
-      <Vars {...{i, j, k, p, setI, setJ, setK}} />
+      <Vars {...{ i, j, k, p, setI, setJ, setK }} />
       <MJX>{macros}</MJX>
-      <Diagram {...{e, i, j, k, p}} />
+      <Diagram {...{ e, i, j, k, p }} />
     </>
   );
 }
@@ -89,7 +89,7 @@ export function Diagram({
     let Nyg, normal;
 
     /** Image of the differential */
-    const nygDiff = epsilon({i, d, e, p}) * brace(d, e);
+    const nygDiff = epsilon({ d, e, i, p }) * brace(d, e);
 
     // Nygaard
     Nyg = "";
@@ -174,12 +174,12 @@ export function Vars({
             </td>
             <td>
               <input
-                type="number"
-                min={1}
                 max={10}
-                step={1}
-                value={i}
+                min={1}
                 onChange={(evt) => setI(parseInt(evt.currentTarget.value))}
+                step={1}
+                type="number"
+                value={i}
               />
             </td>
           </tr>
@@ -189,8 +189,8 @@ export function Vars({
             </td>
             <td>
               <select
-                value={j}
                 onChange={(evt) => setJ(parseInt(evt.currentTarget.value))}
+                value={j}
               >
                 {jOptions.map((j) => (
                   <option key={j} value={j}>
@@ -206,10 +206,10 @@ export function Vars({
             </td>
             <td>
               <select
-                value={k}
                 onChange={(evt) =>
                   setK(parseInt(evt.currentTarget.value) as 0 | 1)
                 }
+                value={k}
               >
                 <option value={0}>0</option>
                 <option value={1}>1</option>
