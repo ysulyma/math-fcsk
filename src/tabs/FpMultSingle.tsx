@@ -1,5 +1,5 @@
-import { KTX as $ } from "@liqvid/katex/plain";
-import { range } from "@liqvid/utils/misc";
+import { KTX as $ } from "@liqvid/katex";
+import { range } from "@liqvid/utils";
 import { useReducer } from "react";
 
 import type { Ring } from "../App.tsx";
@@ -80,8 +80,6 @@ function VarsTable({
   const setRadio = (evt: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ mode: evt.currentTarget.value as Mode });
   };
-
-  console.log(mode);
 
   return (
     <form>
@@ -299,7 +297,7 @@ function Equations({ mode, i1, j1, i2, j2, e, p }: Ring & State) {
   // won't work without span
   return (
     <>
-      <$ display>{tex}</$>
+      <$ displayMode>{tex}</$>
       <div className="tex-source">
         <$>\TeX</$> code:
         <pre>

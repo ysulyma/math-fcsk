@@ -1,5 +1,5 @@
-import { KTX as $ } from "@liqvid/katex/plain";
-import { range } from "@liqvid/utils/misc";
+import { KTX as $ } from "@liqvid/katex";
+import { range } from "@liqvid/utils";
 import { Fragment, useState } from "react";
 
 import type { Ring } from "../App.tsx";
@@ -147,7 +147,7 @@ function TimesTable({ e, p, mode }: Ring & { mode: Mode }) {
                       const tex = formatSum(product.map(formatGen));
                       return (
                         <td key={j2}>
-                          {product.length > 0 && <$ display>{tex}</$>}
+                          {product.length > 0 && <$ displayMode>{tex}</$>}
                         </td>
                       );
                     })}

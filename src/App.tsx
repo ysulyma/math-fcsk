@@ -1,13 +1,13 @@
-import { KTX as $ } from "@liqvid/katex/plain";
-import * as Tabs from "@radix-ui/react-tabs";
-import { useReducer } from "react";
+import { KTX as $ } from "@liqvid/katex";
+import { Tabs } from "radix-ui";
+import { type JSX, useReducer } from "react";
 
 import { Bands } from "./tabs/Bands.tsx";
 import { FpMultSingle } from "./tabs/FpMultSingle.tsx";
 import { FpMultTable } from "./tabs/FpMultTable.tsx";
+import { Interlocking } from "./tabs/Interlocking.tsx";
 
 import "./styles.css";
-import { Interlocking } from "./tabs/Interlocking.tsx";
 
 // for LaTeX
 const { raw } = String;

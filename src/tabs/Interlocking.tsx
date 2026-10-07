@@ -1,6 +1,6 @@
 // all the code in this repo sucks,
 // but this one especially sucks
-import { KTX as $ } from "@liqvid/katex/plain";
+import { KTX as $ } from "@liqvid/katex";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useResizeObserver } from "usehooks-ts";
 
@@ -84,11 +84,13 @@ function VarsTable({
 }
 
 function Canvas({ p, m, n }: Config & Pick<Ring, "p">) {
-  const canvas = useRef() as React.MutableRefObject<HTMLCanvasElement>;
+  const canvas = useRef<HTMLCanvasElement>(null);
   const xmax = 150;
   const ymax = 150;
 
   const redraw = useCallback(() => {
+    if (!canvas.current) return;
+
     // sizing
     const { height, width } = canvas.current.getBoundingClientRect();
     canvas.current.width = width;
@@ -110,7 +112,7 @@ function Canvas({ p, m, n }: Config & Pick<Ring, "p">) {
   useResizeObserver({
     onResize: redraw,
 
-    ref: canvas,
+    ref: canvas as React.RefObject<HTMLElement>,
   });
 
   return <canvas className="interlocking" ref={canvas} />;

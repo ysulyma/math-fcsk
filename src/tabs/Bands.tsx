@@ -1,6 +1,6 @@
-import { KTX as $ } from "@liqvid/katex/plain";
+import { KTX as $ } from "@liqvid/katex";
 import { MJX } from "@liqvid/mathjax/plain";
-import { between, range } from "@liqvid/utils/misc";
+import { between, range } from "@liqvid/utils";
 import { useState } from "react";
 
 import type { Ring } from "../App.tsx";
@@ -156,11 +156,7 @@ export function Diagram({
 
   // the author of @liqvid/mathjax is a fool, so this
   // won't work without span
-  return (
-    <MJX display span>
-      {doc}
-    </MJX>
-  );
+  return <MJX display>{doc}</MJX>;
 }
 
 export function Vars({
