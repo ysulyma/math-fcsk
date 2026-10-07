@@ -1,40 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link href="/vite.svg" rel="icon" type="image/svg+xml">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Floor, ceiling, slopes, and K-theory</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Floor, ceiling, slopes, and K-theory</title>
+    <!-- social shares -->
+    <meta content="width=device-width,initial-scale=1" name="viewport">
+    <meta content="summary_large_image" name="twitter:card">
+    <meta content="https://ysulyma.github.io/papers/fcsk/" property="og:url">
+    <meta content="Floor, ceiling, slopes, and K-theory" property="og:title">
+    <meta
+      content='Interactive figures and source code for the article "Floor, ceiling, slopes, and K-theory"'
+      name="description"
+    >
+    <meta
+      content='React UI accompanying the article "Floor, ceiling, slopes, and K-theory"'
+      property="og:description"
+    >
+    <meta
+      content="https://ysulyma.github.io/assets/fcsk.png"
+      property="og:image"
+    >
+    <meta
+      content="https://ysulyma.github.io/assets/fcsk.png"
+      name="twitter:image"
+    >
+    <meta content="article" property="og:type">
+    <meta content="2023-01-23T00:00:00.000Z" property="article:published_time">
+    <meta content="https://github.com/ysulyma" property="article:author">
+    <link href="https://ysulyma.github.io/papers/fcsk/" rel="canonical">
 
-  <!-- social shares -->
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:url" content="https://ysulyma.github.io/papers/fcsk/">
-  <meta property="og:title" content="Floor, ceiling, slopes, and K-theory">
-  <meta name="description"
-    content="Interactive figures and source code for the article &quot;Floor, ceiling, slopes, and K-theory&quot;">
-  <meta property="og:description"
-    content="React UI accompanying the article &quot;Floor, ceiling, slopes, and K-theory&quot;">
-  <meta property="og:image" content="https://ysulyma.github.io/assets/fcsk.png">
-  <meta name="twitter:image" content="https://ysulyma.github.io/assets/fcsk.png">
-  <meta property="og:type" content="article">
-  <meta property="article:published_time" content="2023-01-23T00:00:00.000Z">
-  <meta property="article:author" content="https://github.com/ysulyma">
-  <link rel="canonical" href="https://ysulyma.github.io/papers/fcsk/">
+    <!-- KaTeX -->
+    <link
+      crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css"
+      integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0"
+      rel="stylesheet"
+    >
 
-  <!-- KaTeX -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css"
-    integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+    <!-- The loading of KaTeX is deferred to speed up page rendering -->
+    <script
+      crossorigin="anonymous"
+      defer
+      integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4"
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"
+    ></script>
 
-  <!-- The loading of KaTeX is deferred to speed up page rendering -->
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"
-    integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4"
-    crossorigin="anonymous"></script>
-
-
-  <!-- MathJax -->
-  <script>
+    <!-- MathJax -->
+    <script>
     window.MathJax = {
       loader: {
         load: [
@@ -54,17 +69,18 @@
         typeset: false, // don't perform initial typeset
       },
       tex: {
-        packages: {"[+]": ["color", "load-head", "html", "xypic"]},
+        packages: { "[+]": ["color", "load-head", "html", "xypic"] },
       },
     };
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="./symbols.tex" type="math/tex"></script>
-</head>
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <script src="./symbols.tex" type="math/tex"></script>
+  </head>
 
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+  <body>
+    <div id="root"></div>
+    <script prerender src="/src/index.tsx" type="module"></script>
+  </body>
 </html>
